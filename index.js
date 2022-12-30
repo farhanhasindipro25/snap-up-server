@@ -20,11 +20,19 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const usersCollection = client.db("taskboardersDB").collection("users");
     const tasksCollection = client.db("taskboardersDB").collection("tasks");
+
+    // API for saving a new user to DB
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
   } finally {
   }
 }
-run.catch(console.log);
 
 app.get("/", async (req, res) => {
   res.send("Taskboarders server is running!");
